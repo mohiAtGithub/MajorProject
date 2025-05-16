@@ -4,10 +4,11 @@ import "./globals.css";
 import { ConvexClientProvider } from "@/providers/convex-client-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { ModalProvider } from "@/providers/modal-provider";
+import ChatPanel from './chatbot/ChatPanel';
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-    title: "Miro Clone",
+    title: "IntelliSketch",
 };
 
 export default function RootLayout({
@@ -22,8 +23,10 @@ export default function RootLayout({
                     <Toaster />
                     <ModalProvider />
                     {children}
+                    <ChatPanel />
                 </ConvexClientProvider>
             </body>
         </html>
     );
 }
+
