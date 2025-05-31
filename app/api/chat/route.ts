@@ -1,17 +1,43 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import { NextRequest } from "next/server";
+
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
+const encoder = new TextEncoder();
 
 export async function POST(req: NextRequest) {
-  const { messages } = await req.json();
+  const { messages = [] } = await req.json();
 
-  // stream from Ollama (local) — change URL/model as needed
-  const ollamaRes = await fetch('http://localhost:11434/api/chat', {
-    method : 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body   : JSON.stringify({ model: 'llama3', messages, stream: true }),
+  const contents = messages
+    .filter((m: any) => m.content?.trim())
+    .map((m: any) => ({
+      role: m.role === "assistant" ? "model" : "user",
+      parts: [{ text: m.content }],
+    }));
+
+  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
+  const stream = await model.generateContentStream({
+    contents,
+    generationConfig: { temperature: 0.7 },
   });
 
-  // pass Ollama’s JSON-lines stream straight through
-  return new NextResponse(ollamaRes.body, {
-    headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+  const readable = new ReadableStream({
+    async start(controller) {
+      for await (const chunk of stream.stream) {
+        const piece = chunk.text();
+        if (piece) {
+          const jsonLine = JSON.stringify({ message: { content: piece } }) + "\n";
+          controller.enqueue(encoder.encode(jsonLine));
+        }
+      }
+      controller.close();
+    },
+  });
+
+  return new Response(readable, {
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "Transfer-Encoding": "chunked",
+      "Cache-Control": "no-cache",
+    },
   });
 }
