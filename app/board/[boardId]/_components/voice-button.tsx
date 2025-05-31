@@ -56,7 +56,7 @@ const VoiceButton: React.FC<VoiceButtonProps> = ({ canvasState, setCanvasState }
     } else if (lowerCommand.includes("undo")) {
       console.log("Undoing last action...");
       document.dispatchEvent(new KeyboardEvent("keydown", { key: "z", ctrlKey: true }));
-    } else if (lowerCommand.includes("redo")) {
+    } else if (lowerCommand.includes("readu")) {
       console.log("Redoing last undone action...");
       document.dispatchEvent(new KeyboardEvent("keydown", { key: "z", ctrlKey: true, shiftKey: true }));
     } else if (lowerCommand.includes("change color to")) {

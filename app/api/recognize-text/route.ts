@@ -29,11 +29,11 @@ export async function POST(req:any) {
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
-        Authorization: `Bearer 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`, // ✅ secure from .env
+        Authorization: `Bearer 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`, // ✅ secure from .env
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "gpt-4o-mini",
+        model: "gpt-4o",
         messages: [
           {
             role: "user",
@@ -58,7 +58,7 @@ export async function POST(req:any) {
 
 
     const data = await response.json();
-    console.log("hi")
+    console.log("OPEN AI response status:", data);
     const message = data.choices?.[0]?.message?.content || "No text found";
     console.log("OpenAI response:", data);
 

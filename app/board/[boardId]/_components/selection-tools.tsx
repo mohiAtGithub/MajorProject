@@ -286,11 +286,12 @@ const handleExport = async () => {
 
     const imgDataUrl = canvas.toDataURL("image/png");
     const pureBase64 = imgDataUrl.replace(/^data:image\/\w+;base64,/, "");
+    console.log("Base64 Image Data:", pureBase64);
 
     const rawText = await getHandwrittenText(pureBase64);
     const cleanedText = rawText.trim().replace(/\s+/g, " ");
 
-    replaceWithRecognizedText(cleanedText, { x, y, width, height });
+    replaceWithRecognizedText(rawText, { x, y, width, height });
   };
 
   image.src = url;
