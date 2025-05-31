@@ -41,6 +41,7 @@
     "sonner": "^1.4.41",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
+    "tesseract.js": "^6.0.1",
     "use-debouncy": "^5.0.1",
     "usehooks-ts": "^3.1.0",
     "zustand": "^4.5.2"

@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "atlantean-petal-457914-e0",
+  "private_key_id": "7012e92215dbda95d98b270f9ccb76bcfb24916b",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCknBeLU+JOzo5P\nt934YLtePAOFW3JaBQQo/F1GXCFicDt7SLiZwL7CTc3moJgnnl/XsebyEG0aGBQ3\ntXNmqSNCHRP0gtCKafq9Whot+gUT7HR20RcNwPrZKy/2WTBNSjAcKYwe/fsLHRwY\nSvVqKQ5o77nLjZNonMJtKXBgasKFar0KRko5QpBTPInfgeNLUWq3AG/rTt04WpIh\ntu+tzlBHdPetj0iCB7ez0GH0XG0BEL6bwtGAj5hWcatCzdDy547iM59LXJS0ebI8\nyOUeBSg6SdI9QufUigtM9VX2QJdhzNTccJ83LmcAKT1V2B1jkaE4zLHbmUuxv+mI\n8Mv0G7ebAgMBAAECggEATLR7+C3XmBeCkz0/zzzsMsZOcbciOzZ5MMwgfufxmphn\n71P8yZDak1qEJwMQw+12BeHdl1D2NiGgUjFYnC8Wwfkg0mCe4tDtyYySBHisIxOd\nVbyrPHp/qfEJAYegDXQTpRvrMonxkMU40U0kvRpyn42OC39mgGoD47BasGMvT9Gk\n+ifv04mDaOCF5U67gDUQzDfvnLKZP3zU6Ems+/gbxm+hTzEXlBwvK8zQFvVeuqL+\nB79JatIgdBSlszYTt2RAyjMJq3aIjiEr2WmmpTXFLR4e/gdZ+PuVtSNnaztxpgxQ\nNqx91G3M3L4I2zVGTmbteZu2VbdfZO5na9wd3VPi4QKBgQDRGQanfv8dRemVnOIX\n1kVxdfFhYoqv7yaubdHtyJAuCbrdmiJ5ZLDv9QWY+x9QOM9G9qVOUuy0cO4aH1t2\nlWpNCU5brH1E98bhNAZOw6KMZuPJFsCa/4RkXHcNdXm3qxSRSueZulR0cb1hgGZu\nvXUEoGh3CcGM7rE8CNuTJugjEQKBgQDJiHCqlixJ1LdQY0csmMLEbIAVG/+rZz7m\nq1Br3U2xuUBacsRLBr28COVCNNpQ9vMoo9aku8CfFuMoMB1nL9QvPgBEGB5KbN9D\nDRb77X142p866trJw/M/CbL/W8KIWm9IIPl4sTAT2RQnVb2VXonBe7AAbjD+vqZT\nnlkw+g0X6wKBgQDCPu9xlobE2PfAJzfaURG974VHpNWVzyMuE5NbxGA8hIl16ARy\npVnB8Os8TL2wNrZIBEVY16xRjD+FQPAk33UbD7QdccYF1fCJsVzSuuc8azDc1Cgl\nVY3V9hgbBrEGMQYwW1d/9hsS+b6m3zNJWPNmUuX4/7UwiWVYkhn5P8GTIQKBgQDC\nG0n4459QlTLimFxrFc8yBRbwPgFog47P+V0CJyq37KeQ9k0dviZsv1yhAersZI4b\nLIKGM9f44sBzarRHOIfz4JG9BEXYhTgcirUCfOGGz3rh8mY8QyE8LAldbnHVhtT7\n8daWaoLV+xUwNaLeBSpFUu5X28oQ8mucyj05sP1/dQKBgBB52dCOVvUAZGDKc4aq\nblSCqdYTAFip9brjVpVb0jKWryl6yo4JVMMHfsIfPV/md7KsYeyYZyWdW3N3ib9X\nD4Y0LqcXMO/8UL2dkJTuSRnaTcdieTz1NBwAZ9Ub4jOy71nAwg98DXnS3sk0Kf0Z\n41bEsElf2K+3Lw7kqtG8uKPu\n-----END PRIVATE KEY-----\n",
+  "client_email": "major-project@atlantean-petal-457914-e0.iam.gserviceaccount.com",
+  "client_id": "115101549692763844861",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/major-project%40atlantean-petal-457914-e0.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

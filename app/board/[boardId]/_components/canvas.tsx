@@ -30,6 +30,7 @@ import {
     useStorage,
     useOthersMapped,
     useSelf,
+    useMyPresence,
 } from "@/liveblocks.config";
 import { CursorsPresence } from "./cursors-presence";
 import {
@@ -53,6 +54,8 @@ import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 
+
+
 const MAX_LAYERS = 100;
 const SELECTION_NET_THRESHOLD = 5;
 const MOVE_OFFSET = 5;
@@ -62,6 +65,13 @@ interface CanvasProps {
 }
 
 export const Canvas = ({ boardId }: CanvasProps) => {
+
+      const [presence, setPresence] = useMyPresence();
+
+
+    const [penSize, setPenSize] = useState<number>(4); // Default size
+
+
     const layerIds = useStorage((root) => root.layerIds);
 
     const pencilDraft = useSelf((me) => me.presence.pencilDraft);
@@ -77,9 +87,9 @@ export const Canvas = ({ boardId }: CanvasProps) => {
     }, []);
 
     const [lastUsedColor, setLastUsedColor] = useState<Color>({
-        r: 255,
-        g: 255,
-        b: 255,
+        r: 0,
+        g: 0,
+        b: 0,
     });
 
     useDisableScrollBounce();
@@ -117,7 +127,7 @@ export const Canvas = ({ boardId }: CanvasProps) => {
             liveLayers.set(layerId, layer);
 
             setMyPresence({ selection: [layerId] }, { addToHistory: true });
-            setCanvasState({ mode: CanvasMode.None });
+           // setCanvasState({ mode: CanvasMode.None });
         },
         [lastUsedColor]
     );
@@ -222,7 +232,7 @@ export const Canvas = ({ boardId }: CanvasProps) => {
             const id = nanoid();
             liveLayers.set(
                 id,
-                new LiveObject(penPointsToPathLayer(pencilDraft, lastUsedColor))
+                new LiveObject(penPointsToPathLayer(pencilDraft, lastUsedColor, penSize))
             );
 
             const liveLayerIds = storage.get("layerIds");
@@ -237,14 +247,16 @@ export const Canvas = ({ boardId }: CanvasProps) => {
     );
 
     const startDrawing = useMutation(
-        ({ setMyPresence }, point: Point, pressure: number) => {
-            setMyPresence({
-                pencilDraft: [[point.x, point.y, pressure]],
-                penColor: lastUsedColor,
-            });
-        },
-        [lastUsedColor]
-    );
+  ({ setMyPresence }, point: Point, pressure: number) => {
+    setMyPresence({
+      pencilDraft: [[point.x, point.y, pressure]],
+      penColor: lastUsedColor,
+      penSize, // ✅ Add this line
+    });
+  },
+  [lastUsedColor, penSize] // ✅ Include penSize in dependencies
+);
+
 
     const resizeSelectedLayer = useMutation(
         ({ storage, self }, point: Point) => {
@@ -549,11 +561,13 @@ export const Canvas = ({ boardId }: CanvasProps) => {
 
     return (
         <main className="h-full w-full relative bg-neutral-100 touch-none">
-            <Info boardId={boardId} exportAsPng={exportAsPng} />
+            <Info boardId={boardId} exportAsPng={exportAsPng} /> 
             <Participants />
             <Toolbar
                 canvasState={canvasState}
                 setCanvasState={setCanvasState}
+                penSize={penSize}
+                setPenSize={setPenSize}
                 canUndo={canUndo}
                 canRedo={canRedo}
                 undo={history.undo}
@@ -567,6 +581,7 @@ export const Canvas = ({ boardId }: CanvasProps) => {
                 camera={camera}
                 setLastUsedColor={setLastUsedColor}
                 lastUsedColor={lastUsedColor}
+                svgRef={svgRef}
             />
             <svg
                 ref={svgRef}
@@ -618,13 +633,15 @@ export const Canvas = ({ boardId }: CanvasProps) => {
                             />
                         )}
                     <CursorsPresence />
-                    {pencilDraft && pencilDraft.length > 0 && (
+                    {presence.pencilDraft && presence.pencilDraft.length > 0 && (
                         <Path
-                            points={pencilDraft}
+                            points={presence.pencilDraft}
                             fill={colorToCss(lastUsedColor)}
                             x={0}
                             y={0}
-                        />
+                            penSize={presence.penSize || penSize}  // pass penSize here
+                            />
+
                     )}
                 </g>
             </svg>

@@ -45,8 +45,10 @@ export type PathLayer = {
     width: number;
     fill: Color;
     points: number[][];
+    strokeWidth: number;  // <-- add this line
     value?: string;
 };
+
 
 export type TextLayer = {
     type: LayerType.Text;

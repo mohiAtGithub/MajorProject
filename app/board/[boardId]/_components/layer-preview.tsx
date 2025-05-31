@@ -1,6 +1,6 @@
 "use client";
 
-import { useStorage } from "@/liveblocks.config";
+import { useSelf, useStorage } from "@/liveblocks.config";
 import { LayerType } from "@/types/canvas";
 import { memo } from "react";
 import { Rectangle } from "./rectangle";
@@ -9,6 +9,8 @@ import { Text } from "./text";
 import { Note } from "./note";
 import { Path } from "./path";
 import { colorToCss } from "@/lib/utils";
+
+
 
 interface LayerPreviewProps {
     id: string;
@@ -19,6 +21,10 @@ interface LayerPreviewProps {
 export const LayerPreview = memo(
     ({ id, onLayerPointerDown, selectionColor }: LayerPreviewProps) => {
         const layer = useStorage((root) => root.layers.get(id));
+        const { presence } = useSelf();
+
+        const selection = presence?.selection;
+
         if (!layer) return null;
 
         switch (layer.type) {
@@ -31,6 +37,8 @@ export const LayerPreview = memo(
                         y={layer.y}
                         fill={layer.fill ? colorToCss(layer.fill) : "#000"}
                         stroke={selectionColor}
+                        isSelected={selection?.includes(id)} // ← add this line
+
                     />
                 );
             case LayerType.Note:
