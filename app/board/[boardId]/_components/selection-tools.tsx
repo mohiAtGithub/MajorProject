@@ -1,5 +1,7 @@
 "use client";
 
+import Tesseract from 'tesseract.js';
+
 import { memo } from "react";
 import { useRef } from "react";
 import { useSelectionBounds } from "@/hooks/use-selection-bounds";
@@ -13,6 +15,7 @@ import { ColorPicker } from "./color-picker";
 import { Copy, Trash2 } from "lucide-react";
 import { LiveObject } from "@liveblocks/client";
 import { TextLayer } from "@/types/canvas"; // Import correct types
+import { Base64 } from "convex/values";
 
 interface SelectionToolsProps {
   camera: Camera;
@@ -183,18 +186,32 @@ const replaceWithRecognizedText = useMutation(
 
 
 
-    const getHandwrittenText = async (base64Image: string) => {
-      const res = await fetch("/api/recognize-text", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ base64Image }),
-      });
+    // const getHandwrittenText = async (imageUrl: string) => {
+    //   const res = await fetch("/api/recognize-text", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({ Base64 : imageUrl }),
+    //   });
 
-      const data = await res.json();
-      return data.text;
-    };
+    //   const data = await res.json();
+    //   return data.text;
+    // };
+
+
+const recognizeHandwriting = async (image : string) => {
+  const result = await Tesseract.recognize(
+    image, // image path or base64 string
+    'eng', // language
+    {
+      logger: (m) => console.log(m), // optional: to monitor progress
+    }
+  );
+
+  return result.data.text;
+};
+
 
 //     const handleExport = async () => {
 //       if (!selectionBounds || !svgRef.current) return;
@@ -252,6 +269,31 @@ const replaceWithRecognizedText = useMutation(
 //       image.src = url;
 //     };
 
+// async function uploadToImgBB(base64Image : string): Promise<string> {
+//   const apiKey = "3560894b34a51e29267595fe945205e8"; // replace with your real key
+
+//   const formData = new FormData();
+//   formData.append("key", apiKey);
+//   formData.append("image", base64Image);
+
+//   const response = await fetch("/api/recognize-text", {
+//     method: "POST",
+//     body: formData,
+//   });
+
+//   const data = await response.json();
+//   if (data.success) {
+//     console.log("Image uploaded successfully!");
+//     console.log("Public URL:", data.data.url);
+//     return data.data.url;  // this is the publicly accessible image URL
+//   } else {
+//     console.error("Upload failed:", data);
+//     throw new Error("Upload failed");
+//   }
+// }
+
+
+
 const handleExport = async () => {
   if (!selectionBounds || !svgRef.current) return;
 
@@ -285,13 +327,35 @@ const handleExport = async () => {
     ctx.drawImage(image, 0, 0);
 
     const imgDataUrl = canvas.toDataURL("image/png");
-    const pureBase64 = imgDataUrl.replace(/^data:image\/\w+;base64,/, "");
-    console.log("Base64 Image Data:", pureBase64);
+    //const base64Image = imgDataUrl.replace(/^data:image\/\w+;base64,/, "");
+    const base64Image = "data:image/png;base64," + imgDataUrl;
 
-    const rawText = await getHandwrittenText(pureBase64);
-    const cleanedText = rawText.trim().replace(/\s+/g, " ");
+//     //console.log("Base64 Image Data:", pureBase64);
+// uploadToImgBB(base64Image)
+//   .then(url => {
+//     console.log("Public image URL:", url);
+//     // Now you can send this URL to OpenAI or anywhere else
+//   })
+//   .catch(console.error);
+   const rawText = await recognizeHandwriting(imgDataUrl);;
+    const cleanedText = rawText?.trim().replace(/\s+/g, " ");
 
     replaceWithRecognizedText(rawText, { x, y, width, height });
+
+// try {
+//       // Step 1: Upload to imgbb
+//       const publicImageUrl = await uploadToImgBB(base64Image);
+//       console.log("Public image URL:", publicImageUrl);
+
+//       // Step 2: Send to OpenAI
+//       const rawText = await getHandwrittenText(publicImageUrl);
+//       const cleanedText = rawText?.trim().replace(/\s+/g, " ");
+
+//       // Step 3: Replace in canvas
+//       replaceWithRecognizedText(cleanedText, { x, y, width, height });
+//     } catch (err) {
+//       console.error("Failed to process image:", err);
+//     }
   };
 
   image.src = url;
